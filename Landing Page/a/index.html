@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DV Supply Chain Analytics | Consultoría en Cadena de Suministro & IA</title>
+<meta name="description" content="Consultoría y analítica avanzada para cadenas de suministro: forecast inteligente, optimización de inventarios, capital de trabajo, gestión de riesgos y modelos predictivos con IA.">
+<meta name="theme-color" content="#0B2545">
+
+<!-- Favicon: isotipo de la marca (recortado de Logo.png) -->
+<link rel="icon" type="image/png" href="../favicon.png">
+
+<!-- Tipografía Inter (mejora progresiva; fallback a system-ui si no hay conexión) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Enlace de salto para navegación por teclado / lectores de pantalla -->
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<!-- ============ SPRITE DE ICONOS SVG (uso interno vía <use>) ============ -->
+<svg class="icon-sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="icon-forecast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="3 17 9 11 13 15 21 6"></polyline>
+      <polyline points="14 6 21 6 21 13"></polyline>
+    </symbol>
+    <symbol id="icon-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
+      <path d="M3 8v8l9 5 9-5V8"></path>
+      <path d="M12 13v8"></path>
+    </symbol>
+    <symbol id="icon-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="9" r="6"></circle>
+      <path d="M14.5 5.5A6 6 0 1 1 9 15"></path>
+      <path d="M9 6.5v5M7 9h4"></path>
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"></path>
+      <path d="M12 8v5"></path>
+      <path d="M12 16.2v.1"></path>
+    </symbol>
+    <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="8" r="3.2"></circle>
+      <path d="M3.5 19c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5"></path>
+      <circle cx="17.5" cy="8.5" r="2.4"></circle>
+      <path d="M15.5 13.6c2.5.2 4.5 2.2 4.5 5.4"></path>
+    </symbol>
+    <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
+      <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
+      <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
+      <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
+    </symbol>
+    <symbol id="icon-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l9 5-9 5-9-5 9-5z"></path>
+      <path d="M3 13l9 5 9-5"></path>
+      <path d="M3 8l9 5 9-5"></path>
+    </symbol>
+    <symbol id="icon-ai" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="7" y="7" width="10" height="10" rx="2"></rect>
+      <circle cx="12" cy="12" r="2.2"></circle>
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"></path>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9.5"></circle>
+      <path d="M8 12.5l2.5 2.5L16 9.5"></path>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 5l14 14M19 5L5 19"></path>
+    </symbol>
+    <symbol id="icon-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 19V5M5 12l7-7 7 7"></path>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M13 6l6 6-6 6"></path>
+    </symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"></path>
+    </symbol>
+    <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+      <path d="M3 7l9 6 9-6"></path>
+    </symbol>
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path>
+      <path d="M12 2C6.477 2 2 6.477 2 12c0 1.9.529 3.68 1.447 5.194L2.055 22l4.94-1.362A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.2a8.17 8.17 0 01-4.166-1.14l-.299-.177-3.13.863.85-3.05-.194-.313A8.174 8.174 0 013.8 12c0-4.529 3.671-8.2 8.2-8.2s8.2 3.671 8.2 8.2-3.671 8.2-8.2 8.2z"></path>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <a href="#hero" class="navbar__logo" aria-label="DV Supply Chain Analytics, ir al inicio">
+      <img src="../Logo.png" alt="DV Supply Chain Analytics" class="navbar__logo-img" width="300" height="250">
+    </a>
+
+    <nav class="navbar__nav" id="primaryNav" aria-label="Navegación principal">
+      <a href="#servicios" class="navbar__link">Qué hacemos</a>
+      <a href="#proceso" class="navbar__link">Cómo lo hacemos</a>
+      <a href="#control-tower" class="navbar__link">Control Tower</a>
+      <a href="#testimonios" class="navbar__link">Testimonios</a>
+      <a href="#contacto" class="navbar__link">Contacto</a>
+      <a href="#contacto" class="btn btn--primary btn--sm js-open-modal">Agenda una reunión</a>
+    </nav>
+
+    <button class="navbar__toggle" id="navToggle" aria-controls="primaryNav" aria-expanded="false" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <div class="container hero__inner">
+
+      <div class="hero__content">
+        <p class="eyebrow reveal">Consultoría &amp; Analítica Avanzada en Supply Chain</p>
+        <h1 id="hero-title" class="hero__title reveal">
+          Convierte tu <span class="text-accent">Cadena de Suministro</span> en una Ventaja Competitiva
+        </h1>
+        <p class="hero__subtitle reveal">
+          Ayudamos a empresas a reducir inventarios, mejorar la precisión del forecast, optimizar el
+          capital invertido y tomar mejores decisiones mediante analítica avanzada e Inteligencia Artificial.
+        </p>
+
+        <div class="hero__actions reveal">
+          <a href="#contacto" class="btn btn--primary btn--lg js-open-modal">
+            Agenda una reunión estratégica
+            <svg class="icon" width="18" height="18"><use href="#icon-arrow-right"></use></svg>
+          </a>
+          <a href="#servicios" class="btn btn--ghost btn--lg">Conoce nuestros servicios</a>
+        </div>
+
+        <p class="hero__audience reveal">
+          Con la confianza de líderes de <strong>Retail</strong>, <strong>Consumo Masivo</strong>,
+          <strong>Distribución</strong> y <strong>Manufactura</strong>.
+        </p>
+      </div>
+
+      <!-- Ilustración 100% SVG/CSS: mock de dashboard ejecutivo + insignias flotantes -->
+      <div class="hero__visual reveal" aria-hidden="true">
+        <div class="dashboard-mock">
+          <div class="dashboard-mock__header">
+            <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+            <span class="dashboard-mock__title">Panel Ejecutivo · Supply Chain</span>
+          </div>
+
+          <div class="dashboard-mock__kpis">
+            <div class="kpi"><span class="kpi__value">98%</span><span class="kpi__label">Nivel de servicio</span></div>
+            <div class="kpi"><span class="kpi__value">12%</span><span class="kpi__label">MAPE forecast</span></div>
+            <div class="kpi"><span class="kpi__value">$2M</span><span class="kpi__label">Capital liberado</span></div>
+          </div>
+
+          <svg class="dashboard-mock__chart" viewBox="0 0 320 120" preserveAspectRatio="none">
+            <line x1="0" y1="30" x2="320" y2="30" class="chart-grid"></line>
+            <line x1="0" y1="60" x2="320" y2="60" class="chart-grid"></line>
+            <line x1="0" y1="90" x2="320" y2="90" class="chart-grid"></line>
+            <rect x="10"  y="70" width="26" height="40" rx="3" class="chart-bar" style="animation-delay:.05s"></rect>
+            <rect x="50"  y="50" width="26" height="60" rx="3" class="chart-bar" style="animation-delay:.15s"></rect>
+            <rect x="90"  y="60" width="26" height="50" rx="3" class="chart-bar" style="animation-delay:.25s"></rect>
+            <rect x="130" y="35" width="26" height="75" rx="3" class="chart-bar" style="animation-delay:.35s"></rect>
+            <rect x="170" y="45" width="26" height="65" rx="3" class="chart-bar" style="animation-delay:.45s"></rect>
+            <rect x="210" y="25" width="26" height="85" rx="3" class="chart-bar" style="animation-delay:.55s"></rect>
+            <rect x="250" y="40" width="26" height="70" rx="3" class="chart-bar" style="animation-delay:.65s"></rect>
+            <rect x="290" y="18" width="20" height="92" rx="3" class="chart-bar" style="animation-delay:.75s"></rect>
+            <polyline points="12,85 63,55 103,65 143,30 183,48 223,20 263,42 300,15" class="chart-line"></polyline>
+          </svg>
+        </div>
+
+        <div class="floating-badge floating-badge--1">
+          <svg class="icon" width="16" height="16"><use href="#icon-ai"></use></svg>
+          IA Predictiva
+        </div>
+        <div class="floating-badge floating-badge--2">
+          <svg class="icon" width="16" height="16"><use href="#icon-box"></use></svg>
+          -30% Inventario
+        </div>
+        <div class="floating-badge floating-badge--3">
+          <svg class="icon" width="16" height="16"><use href="#icon-forecast"></use></svg>
+          Forecast en tiempo real
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FRANJA DE RESULTADOS (contadores animados) ============ -->
+  <section class="stats" aria-label="Resultados que generamos para nuestros clientes">
+    <div class="container stats__grid">
+      <div class="stat reveal">
+        <span class="stat__value"><span class="js-counter" data-target="22" data-suffix="%">0</span></span>
+        <span class="stat__label">Reducción promedio de inventario</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat__value"><span class="js-counter" data-target="98" data-suffix="%">0</span></span>
+        <span class="stat__label">Nivel de servicio alcanzado</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat__value"><span class="js-counter" data-prefix="US$" data-target="2" data-suffix="M+">0</span></span>
+        <span class="stat__label">Capital de trabajo liberado</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat__value"><span class="js-counter" data-target="12" data-suffix="%">0</span></span>
+        <span class="stat__label">MAPE promedio en forecast</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. QUÉ HACEMOS ============ -->
+  <section class="services" id="servicios" aria-labelledby="services-title">
+    <div class="container">
+      <p class="eyebrow reveal">Qué hacemos</p>
+      <h2 id="services-title" class="section__title reveal">Servicios de consultoría y analítica avanzada</h2>
+      <p class="section__lead reveal">
+        Combinamos experiencia en cadena de suministro con ciencia de datos e Inteligencia Artificial
+        para convertir información en decisiones rentables.
+      </p>
+
+      <div class="cards-grid">
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-forecast"></use></svg></div>
+          <h3>Forecast Inteligente</h3>
+          <p>Optimiza la demanda utilizando modelos estadísticos y Machine Learning.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-box"></use></svg></div>
+          <h3>Optimización de Inventarios</h3>
+          <p>Reduce exceso de inventario sin afectar el nivel de servicio.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-coin"></use></svg></div>
+          <h3>Capital de Trabajo</h3>
+          <p>Identifica oportunidades para liberar capital inmovilizado.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-shield"></use></svg></div>
+          <h3>Gestión de Riesgos</h3>
+          <p>Anticipa riesgos en la cadena de suministro mediante modelos predictivos.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-users"></use></svg></div>
+          <h3>Análisis de Clientes</h3>
+          <p>Segmentación ABC, rentabilidad y oportunidades de crecimiento por cliente.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-dashboard"></use></svg></div>
+          <h3>Dashboards Ejecutivos</h3>
+          <p>Visualización de KPIs estratégicos en tiempo real para la toma de decisiones.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-layers"></use></svg></div>
+          <h3>Analítica Avanzada</h3>
+          <p>Integramos y modelamos tus datos para descubrir patrones y oportunidades ocultas.</p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__icon"><svg class="icon" width="26" height="26"><use href="#icon-ai"></use></svg></div>
+          <h3>Modelos Predictivos con IA</h3>
+          <p>Aplicamos Inteligencia Artificial para anticipar escenarios y optimizar decisiones.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. CÓMO LO HACEMOS ============ -->
+  <section class="process" id="proceso" aria-labelledby="process-title">
+    <div class="container">
+      <p class="eyebrow reveal">Cómo lo hacemos</p>
+      <h2 id="process-title" class="section__title reveal">Una metodología clara, de diagnóstico a resultados</h2>
+      <p class="section__lead reveal">
+        Un proceso probado en cinco etapas que asegura recomendaciones aplicables y sostenibles en el tiempo.
+      </p>
+
+      <ol class="timeline">
+        <li class="timeline__step reveal">
+          <span class="timeline__number">01</span>
+          <h3>Diagnóstico</h3>
+          <p>Analizamos tus datos y procesos.</p>
+        </li>
+        <li class="timeline__connector" aria-hidden="true">
+          <svg class="icon" width="20" height="20"><use href="#icon-chevron-down"></use></svg>
+        </li>
+        <li class="timeline__step reveal">
+          <span class="timeline__number">02</span>
+          <h3>Descubrimiento</h3>
+          <p>Identificamos oportunidades.</p>
+        </li>
+        <li class="timeline__connector" aria-hidden="true">
+          <svg class="icon" width="20" height="20"><use href="#icon-chevron-down"></use></svg>
+        </li>
+        <li class="timeline__step reveal">
+          <span class="timeline__number">03</span>
+          <h3>Modelado</h3>
+          <p>Construimos modelos predictivos.</p>
+        </li>
+        <li class="timeline__connector" aria-hidden="true">
+          <svg class="icon" width="20" height="20"><use href="#icon-chevron-down"></use></svg>
+        </li>
+        <li class="timeline__step reveal">
+          <span class="timeline__number">04</span>
+          <h3>Implementación</h3>
+          <p>Diseñamos dashboards y herramientas.</p>
+        </li>
+        <li class="timeline__connector" aria-hidden="true">
+          <svg class="icon" width="20" height="20"><use href="#icon-chevron-down"></use></svg>
+        </li>
+        <li class="timeline__step reveal">
+          <span class="timeline__number">05</span>
+          <h3>Resultados</h3>
+          <p>Reducimos costos y mejoramos la rentabilidad.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ SUPPLY CHAIN CONTROL TOWER (infografía) ============ -->
+  <section class="control-tower" id="control-tower" aria-labelledby="control-tower-title">
+    <div class="container control-tower__inner">
+      <div class="control-tower__intro">
+        <p class="eyebrow reveal">Nuestra solución insignia</p>
+        <h2 id="control-tower-title" class="section__title reveal">Supply Chain Control Tower</h2>
+        <p class="section__lead reveal">
+          Un centro de control unificado que integra visibilidad end-to-end, analítica avanzada
+          e Inteligencia Artificial, para que tu operación tome decisiones con datos en tiempo real.
+        </p>
+        <a href="../mvp/index.html" class="btn btn--primary control-tower__cta reveal">
+          Prueba la demo interactiva
+          <svg class="icon" width="18" height="18"><use href="#icon-arrow-right"></use></svg>
+        </a>
+      </div>
+
+      <figure class="control-tower__figure reveal">
+        <img
+          src="../Control%20Tower.png"
+          alt="Infografía de los beneficios y ventajas del Supply Chain Control Tower de DV Supply Chain. Beneficios: visibilidad end-to-end, mejores decisiones, optimización de recursos, reducción de riesgos y mayor rentabilidad. Ventajas: forecast preciso, gerenciamiento inteligente de inventario, uso eficiente del capital, gestión de riesgos en supply chain e IA Alerts."
+          class="control-tower__img"
+          loading="lazy"
+          width="1054"
+          height="1492"
+        >
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 4. TESTIMONIOS ============ -->
+  <section class="testimonials" id="testimonios" aria-labelledby="testimonials-title">
+    <div class="container">
+      <p class="eyebrow reveal">Testimonios</p>
+      <h2 id="testimonials-title" class="section__title reveal">Resultados que hablan por nuestros clientes</h2>
+      <p class="section__note reveal">* Testimonios ilustrativos de casos representativos del sector.</p>
+
+      <div class="testimonials-grid">
+        <blockquote class="testimonial reveal">
+          <svg class="testimonial__quote-mark icon" width="28" height="28" aria-hidden="true"><use href="#icon-layers"></use></svg>
+          <p>"Reducimos el inventario en un 22% y aumentamos la disponibilidad al 98%."</p>
+          <footer>
+            <span class="testimonial__name">Director de Supply Chain</span>
+            <span class="testimonial__role">Empresa de Retail</span>
+          </footer>
+        </blockquote>
+
+        <blockquote class="testimonial reveal">
+          <svg class="testimonial__quote-mark icon" width="28" height="28" aria-hidden="true"><use href="#icon-forecast"></use></svg>
+          <p>"El forecast pasó de un MAPE del 31% al 12%."</p>
+          <footer>
+            <span class="testimonial__name">Gerente de Planeación</span>
+            <span class="testimonial__role">Empresa de Consumo Masivo</span>
+          </footer>
+        </blockquote>
+
+        <blockquote class="testimonial reveal">
+          <svg class="testimonial__quote-mark icon" width="28" height="28" aria-hidden="true"><use href="#icon-coin"></use></svg>
+          <p>"Logramos liberar más de US$2 millones en capital de trabajo."</p>
+          <footer>
+            <span class="testimonial__name">CFO</span>
+            <span class="testimonial__role">Empresa Manufacturera</span>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. ACTÚA AHORA ============ -->
+  <section class="cta-final" id="contacto" aria-labelledby="cta-title">
+    <div class="container cta-final__inner">
+      <p class="eyebrow eyebrow--light reveal">Actúa ahora</p>
+      <h2 id="cta-title" class="section__title section__title--light reveal">¿Listo para optimizar tu Supply Chain?</h2>
+      <p class="section__lead section__lead--light reveal">
+        Agenda una reunión estratégica y descubre cómo podemos ayudarte a reducir costos,
+        mejorar inventarios y aumentar la rentabilidad.
+      </p>
+
+      <button type="button" class="btn btn--accent btn--xl js-open-modal reveal">
+        Agenda una reunión estratégica
+        <svg class="icon" width="20" height="20"><use href="#icon-arrow-right"></use></svg>
+      </button>
+
+      <ul class="checklist-band reveal">
+        <li><svg class="icon" width="18" height="18"><use href="#icon-check"></use></svg>Forecast</li>
+        <li><svg class="icon" width="18" height="18"><use href="#icon-check"></use></svg>Inventarios</li>
+        <li><svg class="icon" width="18" height="18"><use href="#icon-check"></use></svg>Capital</li>
+        <li><svg class="icon" width="18" height="18"><use href="#icon-check"></use></svg>Riesgos</li>
+        <li><svg class="icon" width="18" height="18"><use href="#icon-check"></use></svg>Analítica</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__logo-badge">
+        <img src="../Logo.png" alt="DV Supply Chain Analytics" class="footer__logo-img" width="300" height="250">
+      </span>
+      <p class="footer__text">Consultoría y analítica avanzada para cadenas de suministro modernas.</p>
+    </div>
+
+    <nav class="footer__links" aria-label="Enlaces del sitio">
+      <a href="#servicios">Qué hacemos</a>
+      <a href="#proceso">Cómo lo hacemos</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="footer__contact">
+      <p><svg class="icon" width="18" height="18"><use href="#icon-mail"></use></svg>info@dvsupplychain.com</p>
+      <p><svg class="icon" width="18" height="18"><use href="#icon-whatsapp"></use></svg>(504) 8810-9246</p>
+    </div>
+  </div>
+  <p class="footer__copy">© <span id="year"></span> DV Supply Chain Analytics. Todos los derechos reservados.</p>
+</footer>
+
+<!-- ============ MODAL: AGENDAR REUNIÓN ============ -->
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="scheduleModal">
+    <button type="button" class="modal__close" id="modalClose" aria-label="Cerrar formulario">
+      <svg class="icon" width="20" height="20"><use href="#icon-close"></use></svg>
+    </button>
+
+    <div class="modal__body" id="modalBody">
+      <p class="eyebrow">Agenda una reunión estratégica</p>
+      <h2 id="modalTitle">Hablemos de tu Supply Chain</h2>
+      <p class="modal__lead">Cuéntanos sobre tu operación y te contactaremos en menos de 24 horas hábiles.</p>
+
+      <form class="form" id="scheduleForm" novalidate>
+        <div class="form__row">
+          <div class="form__group">
+            <label for="name">Nombre completo</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+            <span class="form__error" id="nameError" role="alert"></span>
+          </div>
+          <div class="form__group">
+            <label for="email">Email corporativo</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+            <span class="form__error" id="emailError" role="alert"></span>
+          </div>
+        </div>
+
+        <div class="form__row">
+          <div class="form__group">
+            <label for="company">Empresa</label>
+            <input type="text" id="company" name="company" autocomplete="organization" required>
+            <span class="form__error" id="companyError" role="alert"></span>
+          </div>
+          <div class="form__group">
+            <label for="role">Cargo</label>
+            <input type="text" id="role" name="role" placeholder="Ej. Director de Supply Chain" autocomplete="organization-title" required>
+            <span class="form__error" id="roleError" role="alert"></span>
+          </div>
+        </div>
+
+        <div class="form__group">
+          <label for="message">¿Qué desafío te gustaría resolver? <span class="form__optional">(opcional)</span></label>
+          <textarea id="message" name="message" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--block btn--lg">Enviar solicitud</button>
+      </form>
+    </div>
+
+    <div class="form__success" id="formSuccess" hidden>
+      <div class="form__success-icon"><svg class="icon" width="28" height="28"><use href="#icon-check"></use></svg></div>
+      <h3>¡Solicitud recibida!</h3>
+      <p>Gracias por tu interés. Nuestro equipo se pondrá en contacto contigo dentro de las próximas 24 horas hábiles para coordinar la reunión.</p>
+      <button type="button" class="btn btn--ghost" id="successClose">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BOTÓN VOLVER ARRIBA ============ -->
+<button type="button" class="back-to-top" id="backToTop" aria-label="Volver arriba" hidden>
+  <svg class="icon" width="20" height="20"><use href="#icon-arrow-up"></use></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>

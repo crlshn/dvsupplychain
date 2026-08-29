@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Chain Control Tower | Demo MVP — DV Supply Chain Analytics</title>
+<meta name="description" content="Demo interactiva del Supply Chain Control Tower: forecast con IA, gestión de inventarios, capital de trabajo y gestión de riesgos en un solo panel.">
+<meta name="theme-color" content="#0B2545">
+<link rel="icon" type="image/png" href="../favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <a href="../index.html" class="navbar__logo" aria-label="DV Supply Chain Analytics, volver al sitio">
+      <img src="../Logo.png" alt="DV Supply Chain Analytics" class="navbar__logo-img" width="300" height="250">
+    </a>
+
+    <nav class="navbar__nav" id="primaryNav" aria-label="Navegación principal">
+      <a href="#forecast" class="navbar__link">Forecast</a>
+      <a href="#inventario" class="navbar__link">Inventario</a>
+      <a href="#capital" class="navbar__link">Capital</a>
+      <a href="#riesgos" class="navbar__link">Riesgos</a>
+      <a href="../index.html" class="navbar__link">← Volver al sitio</a>
+      <a href="#contacto" class="btn btn--primary btn--sm js-open-modal">Solicita acceso anticipado</a>
+    </nav>
+
+    <button class="navbar__toggle" id="navToggle" aria-controls="primaryNav" aria-expanded="false" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="mvp-hero" id="hero" aria-labelledby="hero-title">
+    <div class="container mvp-hero__inner">
+      <span class="mvp-pill reveal">MVP en desarrollo &middot; Acceso anticipado</span>
+      <p class="eyebrow reveal">Supply Chain Control Tower</p>
+      <h1 id="hero-title" class="mvp-hero__title reveal">
+        Forecast, Inventario, Capital y Riesgo — en un solo panel.
+      </h1>
+      <p class="mvp-hero__subtitle reveal">
+        Esta es una demo interactiva de nuestro Control Tower: mueve los controles de cada sección
+        y observa cómo cambian las proyecciones, las alertas y las recomendaciones en tiempo real.
+        Los datos son simulados; la lógica (forecast con bandas de confianza, stock de seguridad,
+        punto de reorden, EOQ y coeficiente de variación de riesgo) es la misma que aplicamos con datos reales.
+      </p>
+      <div class="mvp-hero__actions reveal">
+        <a href="#forecast" class="btn btn--primary btn--lg">Explorar la demo</a>
+        <a href="#contacto" class="btn btn--ghost btn--lg js-open-modal">Solicita acceso anticipado</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 1. FORECAST ============ -->
+  <section class="mvp-section" id="forecast" aria-labelledby="forecast-title">
+    <div class="container">
+      <p class="eyebrow reveal">01 &middot; Forecast</p>
+      <h2 id="forecast-title" class="section__title reveal">Proyecta la demanda semanal con bandas de confianza</h2>
+      <p class="section__lead reveal">
+        Selecciona un SKU y un horizonte de predicción. El modelo combina tendencia, estacionalidad
+        y variabilidad histórica para generar una proyección con intervalo de confianza del 90%.
+      </p>
+
+      <div class="mvp-panel reveal">
+        <div class="mvp-controls">
+          <label class="mvp-control">
+            <span>SKU a analizar</span>
+            <select id="forecastSkuSelect"></select>
+          </label>
+          <div class="mvp-control">
+            <span>Horizonte de predicción</span>
+            <div class="mvp-btn-group">
+              <button type="button" class="mvp-horizon-btn" data-horizon="4">4 semanas</button>
+              <button type="button" class="mvp-horizon-btn is-active" data-horizon="12">12 semanas</button>
+              <button type="button" class="mvp-horizon-btn" data-horizon="24">24 semanas</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mvp-chart" id="forecastChart"></div>
+
+        <div class="mvp-legend">
+          <span><i class="mvp-legend-swatch mvp-legend-swatch--hist"></i>Demanda histórica</span>
+          <span><i class="mvp-legend-swatch mvp-legend-swatch--forecast"></i>Forecast IA</span>
+          <span><i class="mvp-legend-swatch mvp-legend-swatch--band"></i>Nivel de confianza (90%)</span>
+        </div>
+
+        <div class="mvp-kpi-row">
+          <div class="mvp-kpi"><span class="mvp-kpi__label">Volumen proyectado</span><span class="mvp-kpi__value" id="forecastKpiVolume">—</span></div>
+          <div class="mvp-kpi"><span class="mvp-kpi__label">Impacto neto</span><span class="mvp-kpi__value" id="forecastKpiImpact">—</span></div>
+          <div class="mvp-kpi"><span class="mvp-kpi__label">Crecimiento</span><span class="mvp-kpi__value" id="forecastKpiGrowth">—</span></div>
+          <div class="mvp-kpi"><span class="mvp-kpi__label">Confianza</span><span class="mvp-kpi__value" id="forecastKpiConfidence">—</span></div>
+        </div>
+
+        <div class="mvp-callout" id="forecastRecommendation"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. INVENTARIO ============ -->
+  <section class="mvp-section mvp-section--alt" id="inventario" aria-labelledby="inventory-title">
+    <div class="container">
+      <p class="eyebrow reveal">02 &middot; Inventario</p>
+      <h2 id="inventory-title" class="section__title reveal">Torre de control de inventarios por SKU</h2>
+      <p class="section__lead reveal">
+        Stock de seguridad, punto de reorden y lote económico (EOQ), calculados a partir del forecast
+        y el lead time de cada proveedor. Ajusta el lead time y observa cómo cambia el semáforo de salud.
+      </p>
+
+      <div class="mvp-panel reveal">
+        <div class="mvp-controls">
+          <label class="mvp-control mvp-control--slider">
+            <span>Ajuste de lead time de proveedor: <strong id="leadTimeValue">100%</strong></span>
+            <input type="range" id="leadTimeSlider" min="0.7" max="1.3" step="0.05" value="1.0">
+          </label>
+        </div>
+
+        <div class="mvp-table-wrap">
+          <table class="mvp-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Demanda prom.</th>
+                <th>Stock actual</th>
+                <th>Días de cobertura</th>
+                <th>Punto de reorden</th>
+                <th>EOQ sugerido</th>
+                <th>Nivel de stock</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="mvp-insights" id="inventoryInsights"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. CAPITAL ============ -->
+  <section class="mvp-section" id="capital" aria-labelledby="capital-title">
+    <div class="container">
+      <p class="eyebrow reveal">03 &middot; Capital</p>
+      <h2 id="capital-title" class="section__title reveal">¿Cuánto capital está atrapado?</h2>
+      <p class="section__lead reveal">
+        La misma torre de control valoriza el inventario por categoría de salud, para que
+        identifiques cuánto capital de trabajo puedes liberar y cuánto te cuesta un quiebre de stock.
+        Se recalcula junto con el inventario.
+      </p>
+
+      <div class="mvp-panel mvp-panel--split reveal">
+        <div class="mvp-donut-wrap">
+          <div class="mvp-donut" id="capitalDonut"></div>
+          <div class="mvp-legend mvp-legend--vertical">
+            <span><i class="mvp-legend-swatch" style="background:#D64545"></i>Riesgo de quiebre</span>
+            <span><i class="mvp-legend-swatch" style="background:#00B894"></i>Óptimo (saludable)</span>
+            <span><i class="mvp-legend-swatch" style="background:#F0B94D"></i>Exceso (capital atrapado)</span>
+          </div>
+        </div>
+        <div class="mvp-kpi-col">
+          <div class="mvp-kpi mvp-kpi--lg"><span class="mvp-kpi__label">Valor total del inventario</span><span class="mvp-kpi__value" id="capitalTotal">—</span></div>
+          <div class="mvp-kpi mvp-kpi--lg"><span class="mvp-kpi__label">Capital atrapado en exceso</span><span class="mvp-kpi__value mvp-kpi__value--warning" id="capitalFrozen">—</span><span class="mvp-kpi__note" id="capitalFrozenPct"></span></div>
+          <div class="mvp-kpi mvp-kpi--lg"><span class="mvp-kpi__label">Costo de oportunidad por quiebre</span><span class="mvp-kpi__value mvp-kpi__value--warning" id="capitalOpportunityCost">—</span><span class="mvp-kpi__note" id="capitalOpportunityCostPct"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. GESTIÓN DE RIESGOS ============ -->
+  <section class="mvp-section mvp-section--alt" id="riesgos" aria-labelledby="risk-title">
+    <div class="container">
+      <p class="eyebrow reveal">04 &middot; Gestión de Riesgos</p>
+      <h2 id="risk-title" class="section__title reveal">Simula escenarios de estrés antes de que ocurran</h2>
+      <p class="section__lead reveal">
+        Aplica "shocks" a variables externas (promociones, clima) y observa el impacto proyectado
+        en la demanda. El nivel de riesgo se calcula con el Coeficiente de Variación al cuadrado (CV²)
+        histórico del SKU, el mismo eje de variabilidad que usa la matriz ADI/CV² (Syntetos &amp; Boylan)
+        para clasificar la predictibilidad de la demanda como Regular, Errática o Caótica.
+      </p>
+
+      <div class="mvp-panel reveal">
+        <div class="mvp-controls">
+          <label class="mvp-control">
+            <span>SKU a analizar</span>
+            <select id="riskSkuSelect"></select>
+          </label>
+          <label class="mvp-control mvp-control--slider">
+            <span>Shock: Demanda por promoción <strong id="riskShockPromoValue">1.00x</strong></span>
+            <input type="range" id="riskShockPromo" min="0.5" max="1.5" step="0.05" value="1.0">
+          </label>
+          <label class="mvp-control mvp-control--slider">
+            <span>Shock: Factor clima / estacional <strong id="riskShockClimaValue">1.00x</strong></span>
+            <input type="range" id="riskShockClima" min="0.5" max="1.5" step="0.05" value="1.0">
+          </label>
+        </div>
+
+        <div class="mvp-chart" id="riskChart"></div>
+
+        <div class="mvp-legend">
+          <span><i class="mvp-legend-swatch mvp-legend-swatch--hist"></i>Demanda histórica</span>
+          <span><i class="mvp-legend-swatch mvp-legend-swatch--forecast"></i>Predicción estresada</span>
+          <span><i class="mvp-legend-swatch mvp-legend-swatch--band"></i>Nivel de confianza (90%)</span>
+        </div>
+
+        <div class="mvp-kpi-row">
+          <div class="mvp-kpi"><span class="mvp-kpi__label">Nivel de riesgo</span><span class="mvp-badge" id="riskBadge">—</span></div>
+          <div class="mvp-kpi"><span class="mvp-kpi__label">Variación vs. base</span><span class="mvp-kpi__value" id="riskVariation">—</span></div>
+        </div>
+
+        <div class="mvp-callout" id="riskMitigation"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA FINAL ============ -->
+  <section class="cta-final" id="contacto" aria-labelledby="cta-title">
+    <div class="container cta-final__inner">
+      <p class="eyebrow eyebrow--light reveal">¿Quieres verlo con tus propios datos?</p>
+      <h2 id="cta-title" class="section__title section__title--light reveal">Solicita acceso anticipado al Control Tower</h2>
+      <p class="section__lead section__lead--light reveal">
+        Estamos abriendo un cupo limitado de acceso anticipado para probar el Control Tower
+        con los datos reales de tu operación.
+      </p>
+      <button type="button" class="btn btn--accent btn--xl js-open-modal reveal">Solicita acceso anticipado</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__logo-badge">
+        <img src="../Logo.png" alt="DV Supply Chain Analytics" class="footer__logo-img" width="300" height="250">
+      </span>
+      <p class="footer__text">Consultoría y analítica avanzada para cadenas de suministro modernas.</p>
+    </div>
+    <nav class="footer__links" aria-label="Enlaces del sitio">
+      <a href="../index.html">Volver al sitio</a>
+      <a href="#forecast">Forecast</a>
+      <a href="#inventario">Inventario</a>
+      <a href="#riesgos">Riesgos</a>
+    </nav>
+    <div class="footer__contact">
+      <p><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>info@dvsupplychain.com</p>
+      <p><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path><path d="M12 2C6.477 2 2 6.477 2 12c0 1.9.529 3.68 1.447 5.194L2.055 22l4.94-1.362A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.2a8.17 8.17 0 01-4.166-1.14l-.299-.177-3.13.863.85-3.05-.194-.313A8.174 8.174 0 013.8 12c0-4.529 3.671-8.2 8.2-8.2s8.2 3.671 8.2 8.2-3.671 8.2-8.2 8.2z"></path></svg>(504) 8810-9246</p>
+    </div>
+  </div>
+  <p class="footer__copy">
+    © <span id="year"></span> DV Supply Chain Analytics. Todos los derechos reservados.
+    <span class="footer__version" aria-hidden="true">v1</span>
+  </p>
+</footer>
+
+<!-- ============ MODAL: ACCESO ANTICIPADO ============ -->
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="accessModal">
+    <button type="button" class="modal__close" id="modalClose" aria-label="Cerrar formulario">✕</button>
+
+    <div class="modal__body" id="modalBody">
+      <p class="eyebrow">Acceso anticipado</p>
+      <h2 id="modalTitle">Prueba el Control Tower con tus datos</h2>
+      <p class="modal__lead">Dejamos tu lugar en la lista de acceso anticipado. Te contactaremos en menos de 24 horas hábiles.</p>
+
+      <form class="form" id="accessForm" novalidate>
+        <!-- Access key de Web3Forms asociada a info@dvsupplychain.com: sin esto el envío falla -->
+        <input type="hidden" name="access_key" value="1470c3c8-0e4e-499c-894e-cdb3ccf8baed">
+        <input type="hidden" name="subject" value="Nueva solicitud de acceso anticipado — MVP Control Tower">
+        <input type="checkbox" name="botcheck" class="form__honeypot" style="display:none" tabindex="-1" autocomplete="off">
+
+        <div class="form__group">
+          <label for="accessEmail">Email corporativo</label>
+          <input type="email" id="accessEmail" name="email" autocomplete="email" required>
+          <span class="form__error" id="accessEmailError" role="alert"></span>
+        </div>
+        <div class="form__group">
+          <label for="accessCompany">Empresa <span class="form__optional">(opcional)</span></label>
+          <input type="text" id="accessCompany" name="company" autocomplete="organization">
+        </div>
+        <div class="form__group">
+          <label for="accessInterest">¿Qué te gustaría ver primero? <span class="form__optional">(opcional)</span></label>
+          <select id="accessInterest" name="interest">
+            <option value="forecast">Forecast</option>
+            <option value="inventario">Inventario</option>
+            <option value="capital">Capital</option>
+            <option value="riesgos">Gestión de Riesgos</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block btn--lg">Solicitar acceso</button>
+      </form>
+    </div>
+
+    <div class="form__success" id="formSuccess" hidden>
+      <div class="form__success-icon">✓</div>
+      <h3>¡Listo! Ya estás en la lista.</h3>
+      <p>Gracias por tu interés. Te contactaremos dentro de las próximas 24 horas hábiles con los siguientes pasos.</p>
+      <button type="button" class="btn btn--ghost" id="successClose">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+hosts.txt
+update_page.sh
+.env
+
+# Ignore all Synology indexing folders
+**/@eaDir/
+
+# Ignore all Synology stream files
+*@SynoEAStream
+
+# Ignore all Thumbs.db files
+Thumbs.db
