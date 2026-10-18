@@ -9,6 +9,19 @@ services:
     env_file:
       - .env
     restart: 'always'
+#    restart: unless-stopped
+    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:20241/metrics"]
+#      test: ["CMD", "cloudflared", "version"]
+#      test: ["CMD-SHELL", "wget --spider -q http://web || exit 1"]
+#      test: ["CMD", "cloudflared", "tunnel", "ingress", "validate"]
+#      test: ["CMD", "cloudflared", "user-agent", "http://localhost:20241/ready"]
+#      test: ["CMD", "cloudflared", "user-agent", "http://web"]
+      test: ["CMD", "cloudflared", "tunnel", "--metrics", "127.0.0.1:20241", "ready"] #funciona
+#      test: ["CMD", "cloudflared", "tunnel", "ingress", "validate", "--origin-url", "http://web"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
   web:
     image: nginx:latest
     volumes:
@@ -19,7 +32,7 @@ services:
     healthcheck:
       test: ['CMD', 'service', 'nginx', 'status']
     restart: always
-
+#    restart: unless-stopped
 volumes:
   data:
 
